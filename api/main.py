@@ -11,14 +11,13 @@ BABY_CONNECT_PASSWORD = os.getenv('BABY_CONNECT_PASSWORD')
 
 BABY_CONNECT_AUTH_URL = 'https://www.baby-connect.com/Cmd?cmd=UserAuth'
 BABY_CONNECT_DATA_POST_URL = 'https://www.babyconnect.com/CmdPostW?cmd=StatusPost'
+BABY_CONNECT_DATA_LIST_URL = 'https://www.babyconnect.com/CmdPostW?cmd=StatusList'
 
-# TODO: Pull from API
-BABY_CONNECT_KID_ID = 5243046970130432
+BABY_CONNECT_KID_ID = os.getenv('BABY_CONNET_KID_ID')
 
-SNOO_HISTORICAL_MODE = True
+SNOO_HISTORICAL_MODE = os.getenv('SNOO_HISTORICAL_MODE')
 
-# TODO: Pull from API
-BABY_CONNECT_CHILD_NAME = 'Samuel Isaac'
+BABY_CONNECT_CHILD_NAME = os.getenv('BABY_CONNECT_CHILD_NAME')
 
 def http(request):
     main()
@@ -57,7 +56,7 @@ def main():
                     current_date = datetime.datetime.strptime(session['start_time'],
                                                             '%Y-%m-%dT%H:%M:%S').replace(tzinfo=pytz.timezone('UTC'))
                     duration = session['duration']
-                    txt_string = f'{BABY_CONNECT_CHILD_NAME} slept for {convert(duration)}'
+                    text_string = f'{BABY_CONNECT_CHILD_NAME} slept for {convert(duration)}'
 
                     end_string = datetime.datetime.strftime(end_time.astimezone(local_tz),
                                                             '%-m/%d/%Y %H:%M')
