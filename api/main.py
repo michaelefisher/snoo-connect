@@ -36,6 +36,7 @@ def main():
 
     sessions_list = []
     if SNOO_HISTORICAL_MODE:
+        # Get sessions from the past 24 hours
         sessions = client.get_history(yesterday, today)
         for session in sessions:
             sessions_list.append(session)
@@ -46,6 +47,8 @@ def main():
     for day in sessions_list:
         for session in day.sessions:
             session = session.to_dict()
+            # Are we currently sleeping?
+            # TODO: Add method to check if currently sleeping
             if session['end_time']:
                 try:
                     start_time = datetime.datetime.strptime(session['start_time'],
