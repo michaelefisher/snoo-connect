@@ -12,10 +12,10 @@ BABY_CONNECT_PASSWORD = os.getenv('BABY_CONNECT_PASSWORD')
 BABY_CONNECT_AUTH_URL = 'https://www.baby-connect.com/Cmd?cmd=UserAuth'
 BABY_CONNECT_DATA_POST_URL = 'https://www.babyconnect.com/CmdPostW?cmd=StatusPost'
 
-BABY_CONNET_KID_ID = 5243046970130432
+# TODO: Pull from API
+BABY_CONNECT_KID_ID = 5243046970130432
 
 SNOO_HISTORICAL_MODE = True
-SNOO_TEST_DATA = False
 
 # TODO: Pull from API
 BABY_CONNECT_CHILD_NAME = 'Samuel Isaac'
@@ -46,8 +46,7 @@ def main():
     for day in sessions_list:
         for session in day.sessions:
             session = session.to_dict()
-            print('Raw session data: \n' + str(session))
-            if session['end_time'] or SNOO_TEST_DATA:
+            if session['end_time']:
                 try:
                     start_time = datetime.datetime.strptime(session['start_time'],
                                                             '%Y-%m-%dT%H:%M:%S').replace(tzinfo=pytz.timezone('UTC'))
@@ -79,23 +78,16 @@ def main():
                     seacloud_cookie = request_cookies.get('seacloud1')
 
                     params = {'C': 500,
-                              'Kid': BABY_CONNET_KID_ID,
-                              'uts':
-                              2200 if SNOO_TEST_DATA else
-                              start_time.astimezone(local_tz).strftime('%H%M'),
-                              'ptm':
-                              2230 if SNOO_TEST_DATA else
-                              end_time.astimezone(local_tz).strftime('%H%M'),
-                              'pdt': 200201 if SNOO_TEST_DATA else current_date.astimezone(local_tz).strftime('%y%m%d'),
+                              'Kid': BABY_CONNECT_KID_ID,
+                              'uts': start_time.astimezone(local_tz).strftime('%H%M'),
+                              'ptm': end_time.astimezone(local_tz).strftime('%H%M'),
+                              'pdt': current_date.astimezone(local_tz).strftime('%y%m%d'),
                               'fmt': 'long',
-                              'd': 30 if SNOO_TEST_DATA else round(duration /
-                                                                   60),
+                              'd': round(duration / 60),
                               'tz': -5,
                               'listKid': -1,
-                              'txt': 'Samuel Isaac slept for (30m)' if
-                              SNOO_TEST_DATA else txt_string,
-                              'e': '2/01/2020 22:30' if SNOO_TEST_DATA else
-                              end_string,
+                              'txt': text_string,
+                              'e': end_string,
                              }
 
                     print(params)
