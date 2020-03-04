@@ -21,7 +21,7 @@ BABY_CONNECT_CHILD_NAME = os.getenv('BABY_CONNECT_CHILD_NAME')
 
 BABY_CONNECT_DAY_LIMIT = os.getenv('BABY_CONNECT_DAY_LIMIT')
 
-def http(request):
+def pubSub(event):
     main()
 
 def convert(seconds):
