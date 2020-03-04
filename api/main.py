@@ -13,11 +13,13 @@ BABY_CONNECT_AUTH_URL = 'https://www.baby-connect.com/Cmd?cmd=UserAuth'
 BABY_CONNECT_DATA_POST_URL = 'https://www.babyconnect.com/CmdPostW?cmd=StatusPost'
 BABY_CONNECT_DATA_LIST_URL = 'https://www.babyconnect.com/CmdPostW?cmd=StatusList'
 
-BABY_CONNECT_KID_ID = os.getenv('BABY_CONNET_KID_ID')
+BABY_CONNECT_KID_ID = os.getenv('BABY_CONNECT_KID_ID')
 
 SNOO_HISTORICAL_MODE = os.getenv('SNOO_HISTORICAL_MODE')
 
 BABY_CONNECT_CHILD_NAME = os.getenv('BABY_CONNECT_CHILD_NAME')
+
+BABY_CONNECT_DAY_LIMIT = os.getenv('BABY_CONNECT_DAY_LIMIT')
 
 def http(request):
     main()
@@ -48,22 +50,23 @@ def main():
             session = session.to_dict()
             # Are we currently sleeping?
             # TODO: Add method to check if currently sleeping
-            if session['end_time']:
+            if session['end_time'] and BABY_CONNECT_DAY_LIMIT in\
+            session['end_time'] and BABY_CONNECT_DAY_LIMIT in\
+            session['start_time']:
                 try:
                     start_time = datetime.datetime.strptime(session['start_time'],
-                                                            '%Y-%m-%dT%H:%M:%S').replace(tzinfo=pytz.timezone('UTC'))
-                    end_time = datetime.datetime.strptime(session['end_time'],'%Y-%m-%dT%H:%M:%S').replace(tzinfo=pytz.timezone('UTC'))
+                                                            '%Y-%m-%dT%H:%M:%S').replace(tzinfo=local_tz)
+                    end_time = datetime.datetime.strptime(session['end_time'],'%Y-%m-%dT%H:%M:%S').replace(tzinfo=local_tz)
                     current_date = datetime.datetime.strptime(session['start_time'],
-                                                            '%Y-%m-%dT%H:%M:%S').replace(tzinfo=pytz.timezone('UTC'))
+                                                            '%Y-%m-%dT%H:%M:%S').replace(tzinfo=local_tz)
                     duration = session['duration']
                     text_string = f'{BABY_CONNECT_CHILD_NAME} slept for {convert(duration)}'
 
                     end_string = datetime.datetime.strftime(end_time.astimezone(local_tz),
                                                             '%-m/%d/%Y %H:%M')
 
-                    print(f'start time: {start_time}, end time: {end_time},\
-                          current_date: {current_date}, duration:\
-                          {convert(duration)}')
+                    print(f'start time: {start_time}, end time: {end_time}')
+                    print(f'current_date: {current_date}, duration: {convert(duration)}')
                 except ValueError as e:
                     print('Error converting time: %s' % (e))
 
