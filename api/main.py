@@ -48,11 +48,7 @@ def main():
     for day in sessions_list:
         for session in day.sessions:
             session = session.to_dict()
-            # Are we currently sleeping?
-            # TODO: Add method to check if currently sleeping
-            if session['end_time'] and BABY_CONNECT_DAY_LIMIT in\
-            session['end_time'] and BABY_CONNECT_DAY_LIMIT in\
-            session['start_time']:
+            if session['end_time'] and session['start_time']:
                 try:
                     start_time = datetime.datetime.strptime(session['start_time'],
                                                             '%Y-%m-%dT%H:%M:%S').replace(tzinfo=local_tz)
@@ -89,7 +85,7 @@ def main():
                               'pdt': current_date.astimezone(local_tz).strftime('%y%m%d'),
                               'fmt': 'long',
                               'd': round(duration / 60),
-                              'tz': -5,
+                              'tz': -4,
                               'listKid': -1,
                               'txt': text_string,
                               'e': end_string,
