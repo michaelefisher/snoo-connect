@@ -10,6 +10,7 @@ snoo = "*"
 arrow = "*"
 requests = "*"
 pytz = "*"
+logging = "*"
 
 [requires]
 python_version = "3.8"
